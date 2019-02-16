@@ -766,23 +766,10 @@ void Aircraft::update_external_payload(const struct sitl_input &input)
         external_payload_mass += gripper_epm->payload_mass();
     }
 
+
     // update parachute
     if (parachute && parachute->is_enabled()) {
         parachute->update(input);
         // TODO: add drag to vehicle, presumably proportional to velocity
     }
-}
-
-void Aircraft::update_servo_output(const struct sitl_input &input){
-    // update servo output
-    float base = battery->batt_voltage();
-
-    // simulate simple battery setup
-    float throttle = sitl->motors_on ? (input.servos[2] - 1000) / 1000.0f : 0;
-
-    // lose 0.7V at full throttle
-    out_servo_voltage = base - 0.7f*fabsf(throttle);
-
-    // assume 50A at full throttle
-    out_servo_current = 50.0f * fabsf(throttle);
 }
